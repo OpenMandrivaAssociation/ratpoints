@@ -5,7 +5,7 @@ Group:		Sciences/Mathematics
 License:	GPLv2
 Summary:	Find rational points on hyperelliptic curves
 Version:	2.1.2
-Release:	%mkrel 1
+Release:	%mkrel 2
 Source0:	http://www.mathe2.uni-bayreuth.de/stoll/programs/%{name}-%{version}.tar.gz
 URL:		http://www.sagemath.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -24,7 +24,7 @@ in order to find rational points on hyperelliptic curves.
 %patch0	-p1
 
 %build
-%make CFLAGS="%{optflags} -fPIC"
+%make CCFLAGS="%{optflags} -fPIC"
 
 %install
 mkdir -p %{buildroot}%{_bindir}
