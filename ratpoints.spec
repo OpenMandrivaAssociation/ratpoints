@@ -11,6 +11,7 @@ URL:		http://www.sagemath.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 BuildRequires:	gmp-devel
+BuildRequires:	gzip
 
 Patch0:		ratpoints-2.1.2.patch
 
