@@ -1,0 +1,36 @@
+diff -p -up ratpoints-2.1.2/Makefile.orig ratpoints-2.1.2/Makefile
+--- ratpoints-2.1.2/Makefile.orig	2009-07-15 14:29:13.000000000 -0300
++++ ratpoints-2.1.2/Makefile	2009-07-15 14:33:05.000000000 -0300
+@@ -27,7 +27,10 @@ CC = gcc
+ RM = rm -f
+ INSTALL = cp
+ 
+-INSTALL_DIR = /usr/local
++PREFIX = /usr
++BINDIR = $(PREFIX)/bin
++LIBDIR = $(PREFIX)/lib
++INCDIR = $(PREFIX)/include
+ 
+ CCFLAGS1 = -Wall -O2 -fomit-frame-pointer -DRATPOINTS_MAX_BITS_IN_PRIME=${PRIME_SIZE} -DUSE_SSE
+ # for gcc on Apple, may have to add '-fnested-functions' to CCFLAGS1
+@@ -56,14 +59,14 @@ test: rptest testbase
+ 	diff -q testbase rptest.out
+ 
+ install-bin: ratpoints
+-	${INSTALL} ratpoints ${INSTALL_DIR}/bin/
+-	chmod 755 ${INSTALL_DIR}/bin/ratpoints
++	${INSTALL} ratpoints ${DESTDIR}${BINDIR}
++	chmod 755 ${DESTDIR}${BINDIR}/ratpoints
+ 
+ install-lib: ratpoints.h libratpoints.a
+-	${INSTALL} ratpoints.h ${INSTALL_DIR}/include/
+-	chmod 644 ${INSTALL_DIR}/include/ratpoints.h
+-	${INSTALL} libratpoints.a ${INSTALL_DIR}/lib/
+-	chmod 644 ${INSTALL_DIR}/lib/libratpoints.a
++	${INSTALL} ratpoints.h ${DESTDIR}${INCDIR}
++	chmod 644 ${DESTDIR}${INCDIR}/ratpoints.h
++	${INSTALL} libratpoints.a ${DESTDIR}${LIBDIR}
++	chmod 644 ${DESTDIR}${LIBDIR}/libratpoints.a
+ 
+ install: install-bin install-lib
+ 
