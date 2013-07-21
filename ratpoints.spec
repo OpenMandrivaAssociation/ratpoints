@@ -1,68 +1,64 @@
-%define		name		ratpoints
+%global major	0
 
-Name:		%{name}
-Group:		Sciences/Mathematics
-License:	GPLv2
-Summary:	Find rational points on hyperelliptic curves
+%ifarch x86_64
+%global use_sse -DUSE_SSE
+%else
+%global use_sse %{nil}
+%endif
+
+Name:		ratpoints
 Version:	2.1.3
-Release:	%mkrel 3
+Release:	7%{?dist}
+Summary:	Find rational points on hyperelliptic curves
+License:	GPLv2+
+URL:		http://www.mathe2.uni-bayreuth.de/stoll/programs/
 Source0:	http://www.mathe2.uni-bayreuth.de/stoll/programs/%{name}-%{version}.tar.gz
-URL:		http://www.sagemath.org
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
-
+# Initially generated with help2man as:
+# LD_LIBRARY_PATH=$PWD: help2man --section=1 --no-info \
+#    --version-string="%%{version}" \
+#    -o $RPM_BUILD_ROOT/%%{_mandir}/man1/ratpoints.1 ./ratpoints
+# but edited for better formatting.
+Source1:	%{name}.1
+Source2:	%{name}.rpmlintrc
 BuildRequires:	gmp-devel
-BuildRequires:	gzip
-
-Patch0:		ratpoints-2.1.2.patch
+Patch0:		%{name}-shared.patch
 
 %description
 Ratpoints is a program that uses an optimized quadratic sieve algorithm
 in order to find rational points on hyperelliptic curves.
 
+%package	devel
+Summary:	Development files for %{name}
+Requires:	%{name}%{?_isa} = %{version}-%{release}
+
+%description	devel
+Header and library for development with %{name}.
+
 %prep
 %setup -q
-
 %patch0	-p1
 
+sed -e "s/-Wall -O2 -fomit-frame-pointer/%{optflags} %{use_sse}/" \
+   -e "s/-shared/& $RPM_LD_FLAGS -lgmp -lm/" \
+   -i Makefile
+
 %build
-%make CCFLAGS="%{optflags} -fPIC"
+make %{?_smp_mflags}
 
 %install
-mkdir -p %{buildroot}%{_bindir}
-mkdir -p %{buildroot}%{_libdir}
-mkdir -p %{buildroot}%{_includedir}
-%makeinstall_std LIBDIR=%{_libdir} install
+make install LIBDIR=%{_libdir} DESTDIR=$RPM_BUILD_ROOT
+install -p -D -m644 %{SOURCE1} $RPM_BUILD_ROOT/%{_mandir}/man1/%{name}.1
 
-%clean
-rm -rf %{buildroot}
+%check
+LD_LIBRARY_PATH=$PWD: make test
 
 %files
-%defattr(-,root,root)
+%doc gpl-2.0.txt
+%doc ratpoints-doc.pdf
 %{_bindir}/ratpoints
+%{_libdir}/libratpoints.so.%{major}
+%{_mandir}/man1/ratpoints.1*
+
+%files		devel
 %{_includedir}/ratpoints.h
-%{_libdir}/libratpoints.a
-
-
-%changelog
-* Tue Dec 07 2010 Oden Eriksson <oeriksson@mandriva.com> 2.1.3-3mdv2011.0
-+ Revision: 614700
-- the mass rebuild of 2010.1 packages
-
-* Wed Feb 10 2010 Funda Wang <fwang@mandriva.org> 2.1.3-2mdv2010.1
-+ Revision: 503624
-- rebuild for new gmp
-
-* Wed Jan 27 2010 Paulo Andrade <pcpa@mandriva.com.br> 2.1.3-1mdv2010.1
-+ Revision: 496891
-- Update to newer version 2.1.3.
-
-* Thu Jul 16 2009 Paulo Andrade <pcpa@mandriva.com.br> 2.1.2-2mdv2010.0
-+ Revision: 396508
-+ rebuild (emptylog)
-
-* Wed Jul 15 2009 Paulo Andrade <pcpa@mandriva.com.br> 2.1.2-1mdv2010.0
-+ Revision: 396435
-- Initial import of ratpoints 2.1.2.
-  http://www.mathe2.uni-bayreuth.de/stoll/programs/index.html
-- ratpoints
-
+%{_libdir}/libratpoints.so
