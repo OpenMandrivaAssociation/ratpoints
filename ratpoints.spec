@@ -1,14 +1,14 @@
 %global major	0
 
-%ifarch x86_64
+%ifarch %{x86_64}
 %global use_sse -DUSE_SSE
 %else
 %global use_sse %{nil}
 %endif
 
 Name:		ratpoints
-Version:	2.1.3
-Release:	7%{?dist}
+Version:	2.2.1
+Release:	1%{?dist}
 Summary:	Find rational points on hyperelliptic curves
 License:	GPLv2+
 URL:		http://www.mathe2.uni-bayreuth.de/stoll/programs/
@@ -35,18 +35,17 @@ Requires:	%{name}%{?_isa} = %{version}-%{release}
 Header and library for development with %{name}.
 
 %prep
-%setup -q
-%patch0	-p1
+%autosetup -p1
 
 sed -e "s/-Wall -O2 -fomit-frame-pointer/%{optflags} %{use_sse}/" \
    -e "s/-shared/& $RPM_LD_FLAGS -lgmp -lm/" \
    -i Makefile
 
 %build
-make %{?_smp_mflags}
+%make_build
 
 %install
-make install LIBDIR=%{_libdir} DESTDIR=$RPM_BUILD_ROOT
+%make_install LIBDIR=%{_libdir}
 install -p -D -m644 %{SOURCE1} $RPM_BUILD_ROOT/%{_mandir}/man1/%{name}.1
 
 %check
