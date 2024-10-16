@@ -11,7 +11,7 @@ Version:	2.2.1
 Release:	1%{?dist}
 Summary:	Find rational points on hyperelliptic curves
 License:	GPLv2+
-URL:		http://www.mathe2.uni-bayreuth.de/stoll/programs/
+URL:		https://www.mathe2.uni-bayreuth.de/stoll/programs/
 Source0:	http://www.mathe2.uni-bayreuth.de/stoll/programs/%{name}-%{version}.tar.gz
 # Initially generated with help2man as:
 # LD_LIBRARY_PATH=$PWD: help2man --section=1 --no-info \
