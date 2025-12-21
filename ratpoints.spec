@@ -20,6 +20,7 @@ Source0:	http://www.mathe2.uni-bayreuth.de/stoll/programs/%{name}-%{version}.tar
 # but edited for better formatting.
 Source1:	%{name}.1
 Source2:	%{name}.rpmlintrc
+BuildRequires:	make
 BuildRequires:	gmp-devel
 Patch0:		%{name}-shared.patch
 
