@@ -7,7 +7,7 @@
 %endif
 
 Name:		ratpoints
-Version:	2.2.1
+Version:	2.2.2
 Release:	1%{?dist}
 Summary:	Find rational points on hyperelliptic curves
 License:	GPLv2+
@@ -22,7 +22,7 @@ Source1:	%{name}.1
 Source2:	%{name}.rpmlintrc
 BuildRequires:	make
 BuildRequires:	gmp-devel
-Patch0:		%{name}-shared.patch
+# dropped (no longer applies): Patch0:		%{name}-shared.patch
 
 %description
 Ratpoints is a program that uses an optimized quadratic sieve algorithm
